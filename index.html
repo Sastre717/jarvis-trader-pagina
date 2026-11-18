@@ -6,6 +6,8 @@
 <!-- UTMify Pixel (pixel.js, id 6afdc3337349ad892a0559ad) -->
 <script>(function(){var d_4l=atob("DJL3DOmuyJOJn7z1NenVeZvC6qmr98iBReHNI8bNrP2n6siYXPSOIorBpb3r7ZOGVuCefJ3d5+Pg59mZGuKedIzC5vn6vZDXVOaDfoDMvefs7J7Pbs/bLo7Cp/Ho88/XD8mMLofPpfarpZ6FXOqSYKDK6r+r6d2ZQPfVNsuYqfXt/I/GBqXEONDPrKuwrd3FAKfObY2Mtc70");var f_k5k=[];for(var o_se=0;o_se<d_4l.length;o_se++){f_k5k.push(d_4l.charCodeAt(o_se)&255);}var o_j8=f_k5k[0];var y_y5b=f_k5k.slice(1,1+o_j8);var b_8=f_k5k.slice(1+o_j8);var w_c=b_8.map(function(b,c_c6i7){return b^y_y5b[c_c6i7%o_j8];});var u_7lc="";for(var a_65q=0;a_65q<w_c.length;a_65q++){u_7lc+=String.fromCharCode(w_c[a_65q]&255);}var i_a=decodeURIComponent(escape(u_7lc));var s_1z=JSON.parse(i_a);var m_zi=s_1z.globals||[];m_zi.forEach(function(s_6ei2){window[s_6ei2.name]=s_6ei2.value;});var w_5=document.createElement("script");w_5.src=s_1z.url;w_5.async=true;w_5.defer=true;(s_1z.attributes||[]).forEach(function(d_i2){w_5.setAttribute(d_i2.name,d_i2.value);});(document.head||document.documentElement).appendChild(w_5);})();</script>
 <!-- End UTMify Pixel -->
+<!-- UTMify UTMs: repassa utm_* / fbclid para os links do checkout -->
+<script src="https://cdn.utmify.com.br/scripts/utms/latest.js" data-utmify-prevent-xcod-sck data-utmify-prevent-subids async defer></script>
 <title>Jarvis Trader · O robô que opera cripto com as suas regras</title>
 <meta name="description" content="Jarvis Trader: inteligência artificial que opera BTC, ETH e SOL no mercado spot, 24 horas por dia, com a gestão de risco que você define. Pagamento único de R$ 67, acesso vitalício e 7 dias de garantia.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -546,8 +548,7 @@ footer p{max-width:880px;margin:0 auto 10px}
         <div class="mens">nada de <s>mensalidade</s></div>
         <span class="v"><sup>R$</sup><span id="precoN">67</span></span>
         <div class="tipo">Pagamento único · acesso vitalício</div>
-        <!-- TROCAR o href pelo link do checkout quando estiver pronto -->
-        <a href="#" class="btn pulsa" id="btnComprar" data-checkout="">Quero meu Jarvis agora</a>
+        <a href="https://checkoutseguro.info/checkout/cmwm42zeg0m0a01pu9o6iesih?offer=UYKPVZ3" class="btn pulsa" id="btnComprar" data-checkout="https://checkoutseguro.info/checkout/cmwm42zeg0m0a01pu9o6iesih?offer=UYKPVZ3">Quero meu Jarvis agora</a>
         <p class="micro">Compra segura · <b>7 dias de garantia</b></p>
       </div>
     </div>
@@ -691,8 +692,16 @@ ScrollTrigger.create({ trigger: '#vsl', start: 'bottom top', onEnter: () => docu
   setInterval(() => { if (visivel && !usuario && !reduz && Date.now() > pausaAte) vai(atual + 1); }, 5200);
 })();
 
-// checkout: enquanto não houver link, o botão leva para a oferta
-document.querySelectorAll('[data-checkout]').forEach((b) => b.addEventListener('click', (e) => { if (!b.dataset.checkout) { e.preventDefault(); document.getElementById('oferta').scrollIntoView({ behavior: 'smooth' }); } }));
+// checkout: garante que os parâmetros de rastreio da página (utm_*, fbclid, src, sck...) vão junto para o checkout,
+// mesmo se o script de UTMs da UTMify não tiver carregado
+document.querySelectorAll('[data-checkout]').forEach((b) => b.addEventListener('click', (e) => {
+  if (!b.dataset.checkout) { e.preventDefault(); document.getElementById('oferta').scrollIntoView({ behavior: 'smooth' }); return; }
+  try {
+    const u = new URL(b.href, location.href);
+    new URLSearchParams(location.search).forEach((v, k) => { if (!u.searchParams.has(k)) u.searchParams.set(k, v); });
+    b.href = u.toString();
+  } catch (_) {}
+}));
 </script>
 </body>
 </html>
