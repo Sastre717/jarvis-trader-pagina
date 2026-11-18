@@ -229,6 +229,48 @@ footer p{max-width:880px;margin:0 auto 10px}
   header .tag{display:none}
 }
 @media (min-width:901px){.fixa{display:none}}
+
+/* ===== CARROSSEL 8 DUVIDAS ===== */
+#duvidas{overflow:hidden}
+#duvidas .sub2{color:var(--dim);margin:14px auto 0;max-width:560px}
+.dv-topo{display:flex;align-items:center;justify-content:space-between;gap:16px;width:min(1160px,92vw);margin:44px auto 18px}
+.dv-hud{display:flex;align-items:center;gap:12px;font:700 12px/1 'JetBrains Mono';letter-spacing:.14em;color:var(--dim);text-transform:uppercase}
+.dv-hud b{color:var(--gr);font-size:16px}
+.dv-seg{display:flex;gap:5px}.dv-seg i{width:22px;height:6px;border-radius:3px;background:rgba(255,255,255,.1);transition:background .4s,box-shadow .4s}
+.dv-seg i.ok{background:var(--gr);box-shadow:0 0 10px rgba(43,214,123,.6)}
+.dv-setas{display:flex;gap:10px}
+.dv-setas button{width:48px;height:48px;border-radius:50%;border:1px solid var(--line);background:#0b121b;color:var(--ink);font-size:20px;cursor:pointer;transition:.25s}
+.dv-setas button:hover{border-color:var(--cy);color:var(--cy);box-shadow:0 0 20px rgba(45,226,255,.3)}
+.dv-trilho{display:flex;gap:22px;overflow-x:auto;scroll-snap-type:x mandatory;padding:20px calc(50% - 170px) 40px;scrollbar-width:none;cursor:grab;-webkit-mask:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent);mask:linear-gradient(90deg,transparent,#000 4%,#000 96%,transparent)}
+.dv-trilho::-webkit-scrollbar{display:none}
+.dv-trilho.arrasta{cursor:grabbing;scroll-snap-type:none}
+.dv-card{flex:0 0 340px;scroll-snap-align:center;border-radius:28px;background:#0b141a;border:1px solid rgba(255,255,255,.08);overflow:hidden;position:relative;transform:scale(.92);opacity:.55;transition:transform .5s cubic-bezier(.2,.8,.2,1),opacity .5s,box-shadow .5s,border-color .5s;user-select:none}
+.dv-card.on{transform:scale(1);opacity:1;border-color:rgba(45,226,255,.45);box-shadow:0 0 0 1px rgba(45,226,255,.15),0 30px 70px rgba(0,0,0,.55),0 0 60px rgba(45,226,255,.15)}
+.dv-bar{display:flex;align-items:center;gap:12px;padding:14px 16px;background:#1f2c34}
+.dv-av{width:38px;height:38px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#bff6ff,#2de2ff 35%,#0a4b5c 75%);box-shadow:0 0 14px rgba(45,226,255,.6);flex:none;position:relative}
+.dv-av::after{content:"";position:absolute;inset:6px;border:1.5px solid rgba(255,255,255,.7);border-radius:50%;transform:rotateX(65deg) rotate(-20deg)}
+.dv-bar b{display:block;font-size:15px}.dv-bar small{font-size:12px;color:#8696a0}
+.dv-n{margin-left:auto;font:700 11px/1 'JetBrains Mono';color:var(--cy);border:1px solid rgba(45,226,255,.35);padding:6px 9px;border-radius:999px}
+.dv-chat{padding:18px 14px 64px;min-height:330px;display:flex;flex-direction:column;gap:10px;background:radial-gradient(circle at 20% 10%,rgba(45,226,255,.05),transparent 50%),#0b141a}
+.dv-b{max-width:86%;padding:10px 13px 18px;border-radius:12px;font-size:15px;line-height:1.42;position:relative}
+.dv-b .h{position:absolute;right:9px;bottom:5px;font-size:10.5px;color:rgba(255,255,255,.5)}
+.dv-q{align-self:flex-end;background:#005c4b;border-top-right-radius:3px}
+.dv-q .h::after{content:" \2713\2713";color:#53bdeb}
+.dv-a{align-self:flex-start;background:#202c33;border-top-left-radius:3px;opacity:0;transform:translateY(14px) scale(.96);transform-origin:left top;transition:opacity .45s,transform .45s cubic-bezier(.2,.9,.3,1.3)}
+.dv-a strong{color:var(--cy)}
+.dv-dig{align-self:flex-start;background:#202c33;border-radius:12px;padding:12px 14px;display:flex;gap:5px;opacity:0;transition:opacity .25s}
+.dv-dig i{width:7px;height:7px;border-radius:50%;background:#8696a0;animation:dg 1s infinite}
+.dv-dig i:nth-child(2){animation-delay:.15s}.dv-dig i:nth-child(3){animation-delay:.3s}
+@keyframes dg{0%,60%,100%{transform:none;opacity:.5}30%{transform:translateY(-4px);opacity:1}}
+.dv-card.dig .dv-dig{opacity:1}
+.dv-card.resp .dv-dig{display:none}
+.dv-card.resp .dv-a{opacity:1;transform:none}
+.dv-selo{position:absolute;right:16px;bottom:16px;font:900 13px/1 'JetBrains Mono';letter-spacing:.12em;color:var(--gr);border:2px solid var(--gr);padding:7px 10px;border-radius:8px;transform:rotate(-10deg) scale(2.2);opacity:0;transition:transform .35s cubic-bezier(.2,.9,.3,1.4),opacity .2s;text-shadow:0 0 12px rgba(43,214,123,.6);box-shadow:0 0 14px rgba(43,214,123,.35),inset 0 0 10px rgba(43,214,123,.2);background:rgba(11,20,26,.85)}
+.dv-card.resp .dv-selo{transform:rotate(-10deg) scale(1);opacity:1;transition-delay:.55s}
+.dv-cta{text-align:center;margin-top:10px}
+.dv-cta .btn{display:inline-flex}
+.dv-nota{display:block;margin-top:14px;font-size:12px;color:var(--dim)}
+@media (max-width:640px){.dv-trilho{padding:20px 8vw 40px}.dv-card{flex-basis:84vw}.dv-setas{display:none}.dv-topo{justify-content:center}.dv-hud span{display:none}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
 </style>
 </head>
@@ -396,6 +438,94 @@ footer p{max-width:880px;margin:0 auto 10px}
   </div>
 </section>
 
+<!-- 8 DUVIDAS (carrossel) -->
+<section id="duvidas">
+  <div class="wrap center">
+    <span class="kicker rv">Antes de decidir</span>
+    <h2 class="rv">As 8 dúvidas que <em>todo mundo tem</em>.</h2>
+    <p class="sub2 rv">E a resposta direta pra cada uma. Arraste pro lado →</p>
+  </div>
+  <div class="dv-topo rv">
+    <div class="dv-hud"><span>Dúvidas respondidas</span><div class="dv-seg" id="dvSeg"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><b id="dvN">0/8</b></div>
+    <div class="dv-setas"><button id="dvAnt" aria-label="Anterior">←</button><button id="dvProx" aria-label="Próxima">→</button></div>
+  </div>
+  <div class="dv-trilho" id="dvTrilho">
+    <article class="dv-card" data-i="0">
+      <div class="dv-bar"><span class="dv-av"></span><div><b>Jarvis Trader</b><small>tira-dúvidas</small></div><span class="dv-n">1/8</span></div>
+      <div class="dv-chat">
+        <div class="dv-b dv-q">Isso não é golpe, não?<span class="h">agora</span></div>
+        <div class="dv-dig"><i></i><i></i><i></i></div>
+        <div class="dv-b dv-a">Faz sentido desconfiar. Por isso aqui <strong>ninguém vai te prometer lucro</strong>. O Jarvis é uma ferramenta de automação que segue as regras que você define. E você ainda tem 7 dias pra testar por dentro.<span class="h">agora</span></div>
+      </div>
+      <span class="dv-selo">RESPONDIDO ✓</span>
+    </article>
+    <article class="dv-card" data-i="1">
+      <div class="dv-bar"><span class="dv-av"></span><div><b>Jarvis Trader</b><small>tira-dúvidas</small></div><span class="dv-n">2/8</span></div>
+      <div class="dv-chat">
+        <div class="dv-b dv-q">Tá, mas onde fica o meu dinheiro?<span class="h">agora</span></div>
+        <div class="dv-dig"><i></i><i></i><i></i></div>
+        <div class="dv-b dv-a">Na <strong>sua conta da OKX, no seu nome</strong>. Ele nunca passa pela gente. O Jarvis só envia as ordens que as suas regras permitem.<span class="h">agora</span></div>
+      </div>
+      <span class="dv-selo">RESPONDIDO ✓</span>
+    </article>
+    <article class="dv-card" data-i="2">
+      <div class="dv-bar"><span class="dv-av"></span><div><b>Jarvis Trader</b><small>tira-dúvidas</small></div><span class="dv-n">3/8</span></div>
+      <div class="dv-chat">
+        <div class="dv-b dv-q">E se eu perder?<span class="h">agora</span></div>
+        <div class="dv-dig"><i></i><i></i><i></i></div>
+        <div class="dv-b dv-a">Pode acontecer: cripto tem risco, e quem diz o contrário tá mentindo. Por isso você define quanto arrisca por operação e a <strong>perda máxima do dia</strong>. Bateu o limite? Ele para.<span class="h">agora</span></div>
+      </div>
+      <span class="dv-selo">RESPONDIDO ✓</span>
+    </article>
+    <article class="dv-card" data-i="3">
+      <div class="dv-bar"><span class="dv-av"></span><div><b>Jarvis Trader</b><small>tira-dúvidas</small></div><span class="dv-n">4/8</span></div>
+      <div class="dv-chat">
+        <div class="dv-b dv-q">Mas eu não entendo nada de trade.<span class="h">agora</span></div>
+        <div class="dv-dig"><i></i><i></i><i></i></div>
+        <div class="dv-b dv-a">Não precisa. Você configura as regras numa <strong>tela simples</strong>, conecta a corretora e toca em Iniciar. A análise e a execução ficam com ele.<span class="h">agora</span></div>
+      </div>
+      <span class="dv-selo">RESPONDIDO ✓</span>
+    </article>
+    <article class="dv-card" data-i="4">
+      <div class="dv-bar"><span class="dv-av"></span><div><b>Jarvis Trader</b><small>tira-dúvidas</small></div><span class="dv-n">5/8</span></div>
+      <div class="dv-chat">
+        <div class="dv-b dv-q">Não tenho tempo pra ficar olhando gráfico.<span class="h">agora</span></div>
+        <div class="dv-dig"><i></i><i></i><i></i></div>
+        <div class="dv-b dv-a">É justamente pra isso que ele existe. O Jarvis trabalha <strong>24 horas</strong> e você acompanha tudo pelo painel quando quiser.<span class="h">agora</span></div>
+      </div>
+      <span class="dv-selo">RESPONDIDO ✓</span>
+    </article>
+    <article class="dv-card" data-i="5">
+      <div class="dv-bar"><span class="dv-av"></span><div><b>Jarvis Trader</b><small>tira-dúvidas</small></div><span class="dv-n">6/8</span></div>
+      <div class="dv-chat">
+        <div class="dv-b dv-q">Como eu vou saber o que ele tá fazendo?<span class="h">agora</span></div>
+        <div class="dv-dig"><i></i><i></i><i></i></div>
+        <div class="dv-b dv-a">Transparência total: cada operação fica registrada com <strong>horário, preço, stop e alvo</strong>. Inclusive as que dão errado.<span class="h">agora</span></div>
+      </div>
+      <span class="dv-selo">RESPONDIDO ✓</span>
+    </article>
+    <article class="dv-card" data-i="6">
+      <div class="dv-bar"><span class="dv-av"></span><div><b>Jarvis Trader</b><small>tira-dúvidas</small></div><span class="dv-n">7/8</span></div>
+      <div class="dv-chat">
+        <div class="dv-b dv-q">Tá, mas quanto custa isso?<span class="h">agora</span></div>
+        <div class="dv-dig"><i></i><i></i><i></i></div>
+        <div class="dv-b dv-a">Robôs assim costumam cobrar todo mês. O Jarvis custa <strong>R$ 67, uma vez só</strong>. Acesso vitalício, sem mensalidade.<span class="h">agora</span></div>
+      </div>
+      <span class="dv-selo">RESPONDIDO ✓</span>
+    </article>
+    <article class="dv-card" data-i="7">
+      <div class="dv-bar"><span class="dv-av"></span><div><b>Jarvis Trader</b><small>tira-dúvidas</small></div><span class="dv-n">8/8</span></div>
+      <div class="dv-chat">
+        <div class="dv-b dv-q">E se eu não gostar?<span class="h">agora</span></div>
+        <div class="dv-dig"><i></i><i></i><i></i></div>
+        <div class="dv-b dv-a">Você tem <strong>7 dias de garantia</strong>. Entra, configura, vê funcionando. Não gostou? Reembolso de 100%, sem pergunta.<span class="h">agora</span></div>
+      </div>
+      <span class="dv-selo">RESPONDIDO ✓</span>
+    </article>
+  </div>
+  <div class="wrap dv-cta rv"><a href="#oferta" class="btn">Tirei minhas dúvidas · ver a oferta</a><span class="dv-nota">Cripto envolve risco. O Jarvis não garante lucro.</span></div>
+</section>
+
 <!-- OFERTA -->
 <section id="oferta">
   <div class="wrap">
@@ -528,6 +658,38 @@ play.addEventListener('click', () => { vid.controls = true; vid.play(); play.sty
 
 // barra fixa no celular depois do vídeo
 ScrollTrigger.create({ trigger: '#vsl', start: 'bottom top', onEnter: () => document.getElementById('fixa').classList.add('on'), onLeaveBack: () => document.getElementById('fixa').classList.remove('on') });
+
+// carrossel das 8 duvidas: desliza sozinho, arrasta, setas; digitando -> resposta -> carimbo
+(() => {
+  const tr = document.getElementById('dvTrilho'), cards = [...tr.querySelectorAll('.dv-card')];
+  const seg = [...document.querySelectorAll('#dvSeg i')], nTxt = document.getElementById('dvN');
+  const feitas = new Set(); let atual = -1, usuario = false, visivel = false, pausaAte = 0;
+  const marca = (k) => { if (feitas.has(k)) return; feitas.add(k); seg[k].classList.add('ok'); nTxt.textContent = feitas.size + '/8'; };
+  const ativa = (k) => {
+    if (k === atual) return;
+    atual = k;
+    cards.forEach((c, j) => c.classList.toggle('on', j === k));
+    const c = cards[k];
+    if (c.classList.contains('resp')) return;
+    cards.forEach((o) => { if (o !== c) o.classList.remove('dig'); });
+    c.classList.add('dig');
+    setTimeout(() => { c.classList.remove('dig'); if (atual !== k) return; c.classList.add('resp'); marca(k); }, reduz ? 0 : 900);
+  };
+  const vai = (k) => { k = (k + cards.length) % cards.length; const c = cards[k]; tr.scrollTo({ left: c.offsetLeft - (tr.clientWidth - c.offsetWidth) / 2, behavior: 'smooth' }); };
+  const centro = () => { const meio = tr.scrollLeft + tr.clientWidth / 2; let best = 0, d = 1e9; cards.forEach((c, j) => { const dd = Math.abs(c.offsetLeft + c.offsetWidth / 2 - meio); if (dd < d) { d = dd; best = j; } }); return best; };
+  let raf; tr.addEventListener('scroll', () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => { if (visivel) ativa(centro()); }); }, { passive: true });
+  const pausa = () => { pausaAte = Date.now() + 7000; };
+  document.getElementById('dvAnt').addEventListener('click', () => { pausa(); vai(atual - 1); });
+  document.getElementById('dvProx').addEventListener('click', () => { pausa(); vai(atual + 1); });
+  let x0 = 0, s0 = 0, arr = false;
+  tr.addEventListener('pointerdown', (e) => { pausa(); if (e.pointerType !== 'mouse') return; arr = true; x0 = e.clientX; s0 = tr.scrollLeft; tr.classList.add('arrasta'); });
+  addEventListener('pointermove', (e) => { if (arr) tr.scrollLeft = s0 - (e.clientX - x0); });
+  addEventListener('pointerup', () => { if (!arr) return; arr = false; tr.classList.remove('arrasta'); vai(centro()); });
+  tr.addEventListener('mouseenter', () => { usuario = true; });
+  tr.addEventListener('mouseleave', () => { usuario = false; });
+  ScrollTrigger.create({ trigger: tr, start: 'top 75%', end: 'bottom 10%', onToggle: (st) => { visivel = st.isActive; if (visivel && atual < 0) ativa(centro()); } });
+  setInterval(() => { if (visivel && !usuario && !reduz && Date.now() > pausaAte) vai(atual + 1); }, 5200);
+})();
 
 // checkout: enquanto não houver link, o botão leva para a oferta
 document.querySelectorAll('[data-checkout]').forEach((b) => b.addEventListener('click', (e) => { if (!b.dataset.checkout) { e.preventDefault(); document.getElementById('oferta').scrollIntoView({ behavior: 'smooth' }); } }));
