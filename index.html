@@ -1,0 +1,533 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jarvis Trader · O robô que opera cripto com as suas regras</title>
+<meta name="description" content="Jarvis Trader: inteligência artificial que opera BTC, ETH e SOL no mercado spot, 24 horas por dia, com a gestão de risco que você define. Pagamento único de R$ 67, acesso vitalício e 7 dias de garantia.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Orbitron:wght@500;700;900&family=JetBrains+Mono:wght@500;700&family=Anton&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#04070b;--bg2:#070c13;--ink:#eef3f8;--dim:#8d97a8;--line:rgba(255,255,255,.09);--cy:#2de2ff;--cy2:#12b3d6;--au:#f5c542;--gr:#2bd67b;--red:#ff4d5e;--r:22px}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif;line-height:1.55;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+img,video{max-width:100%;display:block}
+a{color:inherit;text-decoration:none}
+.wrap{width:min(1160px,92vw);margin:0 auto}
+.mono{font-family:'JetBrains Mono',monospace}
+.orb{font-family:Orbitron,sans-serif}
+/* fundo vivo */
+#fx{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
+#fx .grid{position:absolute;inset:-100px;background-image:linear-gradient(rgba(45,226,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(45,226,255,.05) 1px,transparent 1px);background-size:64px 64px;animation:grade 18s linear infinite}
+@keyframes grade{to{transform:translate(64px,64px)}}
+#fx .b{position:absolute;border-radius:50%;filter:blur(90px);opacity:.35}
+#fx .b1{width:620px;height:620px;background:#0b6f86;left:-200px;top:-120px}
+#fx .b2{width:520px;height:520px;background:#5b3c00;right:-180px;top:40%}
+#cursor-glow{position:fixed;width:520px;height:520px;border-radius:50%;pointer-events:none;z-index:0;background:radial-gradient(circle,rgba(45,226,255,.10),transparent 60%);transform:translate(-50%,-50%);left:-999px;top:-999px;transition:opacity .3s}
+/* topo */
+header{position:sticky;top:0;z-index:50;backdrop-filter:blur(14px);background:rgba(4,7,11,.65);border-bottom:1px solid var(--line)}
+header .wrap{display:flex;align-items:center;height:68px;gap:16px}
+.logo{display:flex;align-items:center;gap:12px;font:700 15px/1 Orbitron;letter-spacing:.32em;color:var(--cy)}
+.logo .esf{width:40px;height:40px;overflow:visible;filter:drop-shadow(0 0 8px rgba(45,226,255,.55))}
+.esf .anelJ{transform-origin:50px 50px;animation:anelJ 7s linear infinite}
+.esf .pts{transform-origin:50px 50px;animation:anelJ 40s linear infinite reverse}
+@keyframes anelJ{to{transform:rotate(360deg)}}
+.logo i{width:34px;height:34px;border-radius:50%;border:2px solid var(--cy);display:grid;place-items:center;font:400 19px/1 Anton;color:#fff;font-style:normal;box-shadow:0 0 18px rgba(45,226,255,.5)}
+header .tag{margin-left:auto;font:600 13px/1 'JetBrains Mono';color:var(--dim)}
+header .tag b{color:var(--au)}
+.btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:12px;padding:22px 42px;border-radius:999px;background:linear-gradient(180deg,#63f1ff,var(--cy2));color:#02141b;font:900 19px/1 Inter;letter-spacing:.04em;text-transform:uppercase;box-shadow:0 0 40px rgba(45,226,255,.45),0 10px 0 #08708a;transition:transform .2s,box-shadow .2s;cursor:pointer;border:0;overflow:hidden}
+.btn:hover{transform:translateY(-3px);box-shadow:0 0 60px rgba(45,226,255,.7),0 13px 0 #08708a}
+.btn:active{transform:translateY(5px);box-shadow:0 0 30px rgba(45,226,255,.5),0 4px 0 #08708a}
+.btn::after{content:"";position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.6),transparent);transform:skewX(-20deg);animation:brilho 3.2s ease-in-out infinite}
+@keyframes brilho{0%,60%{left:-60%}100%{left:130%}}
+.btn.pulsa{animation:pulsa 2.2s ease-in-out infinite}
+@keyframes pulsa{0%,100%{box-shadow:0 0 40px rgba(45,226,255,.45),0 10px 0 #08708a}50%{box-shadow:0 0 75px rgba(45,226,255,.85),0 10px 0 #08708a}}
+.btn-sm{padding:14px 24px;font-size:14px}
+.micro{margin-top:16px;font:600 13px/1.5 'JetBrains Mono';color:var(--dim)}
+.micro b{color:var(--gr)}
+section{position:relative;padding:110px 0}
+.kicker{display:inline-flex;align-items:center;gap:10px;padding:8px 16px;border-radius:999px;border:1px solid rgba(45,226,255,.35);background:rgba(45,226,255,.07);font:700 12px/1 'JetBrains Mono';letter-spacing:.18em;text-transform:uppercase;color:var(--cy)}
+.kicker::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--cy);box-shadow:0 0 10px var(--cy)}
+h1,h2{font-family:Inter;font-weight:900;letter-spacing:-.02em;line-height:1.05}
+h2{font-size:clamp(34px,5vw,58px);margin:18px 0 18px}
+h2 em,h1 em{font-style:normal;background:linear-gradient(90deg,var(--cy),#9ef6ff);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:#b9c3d2;font-size:clamp(17px,2vw,20px);max-width:720px}
+.center{text-align:center}.center .sub{margin:0 auto}
+/* hero */
+.hero{padding:70px 0 90px;text-align:center}
+.hero h1{font-size:clamp(38px,6.4vw,82px);margin:22px auto 18px;max-width:1000px}
+.hero .sub{margin:0 auto 34px}
+.vsl{position:relative;width:min(960px,100%);margin:0 auto 40px;border-radius:24px;padding:3px;background:linear-gradient(135deg,var(--cy),rgba(45,226,255,.1) 40%,rgba(245,197,66,.6));box-shadow:0 0 90px rgba(45,226,255,.25),0 40px 80px rgba(0,0,0,.6)}
+.vsl video{width:100%;border-radius:21px;background:#000;aspect-ratio:16/9}
+.vsl .play{position:absolute;inset:3px;border-radius:21px;display:grid;place-items:center;background:radial-gradient(circle,rgba(4,7,11,.15),rgba(4,7,11,.65));cursor:pointer;transition:opacity .3s}
+.vsl .play span{width:110px;height:110px;border-radius:50%;background:var(--cy);display:grid;place-items:center;box-shadow:0 0 0 14px rgba(45,226,255,.18),0 0 60px rgba(45,226,255,.7);animation:pp 1.8s ease-in-out infinite}
+.vsl .play span::before{content:"";margin-left:8px;border-left:34px solid #02141b;border-top:21px solid transparent;border-bottom:21px solid transparent}
+@keyframes pp{50%{box-shadow:0 0 0 26px rgba(45,226,255,.08),0 0 80px rgba(45,226,255,.9)}}
+.vsl .som{position:absolute;left:50%;bottom:-18px;transform:translateX(-50%);padding:8px 16px;border-radius:999px;background:#0d1520;border:1px solid var(--line);font:700 12px/1 'JetBrains Mono';color:var(--dim);white-space:nowrap}
+.selos{display:flex;flex-wrap:wrap;justify-content:center;gap:26px;margin-top:26px;color:var(--dim);font:600 14px/1 Inter}
+.selos span{display:flex;align-items:center;gap:8px}
+.selos svg{width:18px;height:18px;stroke:var(--gr);fill:none;stroke-width:2.4}
+/* marquee */
+.marq{border-block:1px solid var(--line);background:rgba(45,226,255,.03);overflow:hidden;padding:18px 0}
+.marq .trilho{display:flex;gap:56px;width:max-content;animation:marq 26s linear infinite;font:700 18px/1 Orbitron;letter-spacing:.2em;color:#9fb3c8}
+.marq .trilho span{display:flex;align-items:center;gap:56px}
+.marq .trilho span::after{content:"◆";color:var(--cy);font-size:12px}
+@keyframes marq{to{transform:translateX(-50%)}}
+/* problema */
+.dores{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:50px}
+.dor{padding:34px 30px;border-radius:var(--r);background:linear-gradient(180deg,rgba(255,77,94,.08),rgba(255,255,255,.02));border:1px solid rgba(255,77,94,.25)}
+.dor .n{font:400 64px/1 Anton;color:var(--red);opacity:.9}
+.dor h3{font-size:23px;margin:14px 0 10px}
+.dor p{color:#aeb8c7}
+.virada{margin-top:60px;text-align:center;font:900 clamp(28px,4vw,46px)/1.15 Inter}
+.virada b{color:var(--cy)}
+/* passos */
+.passos{position:relative;margin-top:60px;display:grid;gap:30px;padding-left:80px}
+.passos .linha{position:absolute;left:30px;top:10px;bottom:10px;width:4px;border-radius:2px;background:rgba(255,255,255,.08)}
+.passos .linha i{position:absolute;left:0;top:0;width:100%;height:0;background:linear-gradient(var(--cy),var(--au));border-radius:2px;box-shadow:0 0 18px var(--cy)}
+.passo{position:relative;padding:30px 34px;border-radius:var(--r);background:var(--bg2);border:1px solid var(--line);transition:border-color .4s,box-shadow .4s}
+.passo .num{position:absolute;left:-80px;top:24px;width:64px;height:64px;border-radius:50%;background:#0b111a;border:3px solid rgba(255,255,255,.15);display:grid;place-items:center;font:900 26px/1 Orbitron;color:#5d6b80;transition:all .4s}
+.passo.on{border-color:rgba(45,226,255,.5);box-shadow:0 0 40px rgba(45,226,255,.12)}
+.passo.on .num{border-color:var(--cy);color:var(--cy);box-shadow:0 0 25px rgba(45,226,255,.6)}
+.passo h3{font-size:26px;margin-bottom:8px}
+.passo p{color:#aeb8c7}
+/* mockup */
+.app{margin-top:56px;border-radius:24px;border:1px solid rgba(45,226,255,.25);background:#03060a;box-shadow:0 50px 120px rgba(0,0,0,.7),0 0 80px rgba(45,226,255,.12);overflow:hidden;transform-style:preserve-3d;will-change:transform}
+.app .bar{height:42px;display:flex;align-items:center;gap:8px;padding:0 16px;background:#0e131b;border-bottom:1px solid var(--line)}
+.app .bar i{width:12px;height:12px;border-radius:50%}
+.app .bar .u{margin-left:20px;padding:6px 14px;border-radius:12px;background:#080b11;font:600 12px/1 Inter;color:#9aa6b8}
+.app .corpo{display:grid;grid-template-columns:230px 1fr;min-height:520px;background:linear-gradient(rgba(45,226,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(45,226,255,.035) 1px,transparent 1px),#04080d;background-size:32px 32px}
+.app nav{padding:22px 14px;border-right:1px solid var(--line)}
+.app nav .marca{font:700 13px/1 Orbitron;letter-spacing:.22em;color:var(--cy);padding:0 10px 18px}
+.app nav button{display:flex;width:100%;align-items:center;gap:10px;padding:12px 12px;margin-bottom:4px;border-radius:8px;background:none;border:0;color:#d8e0ea;font:600 14px/1 Inter;cursor:pointer;text-align:left;transition:background .2s,color .2s}
+.app nav button.on,.app nav button:hover{background:rgba(45,226,255,.12);color:var(--cy)}
+.app .tela{padding:28px 32px;position:relative}
+.app .pg{display:none;animation:entra .45s ease}
+.app .pg.on{display:block}
+@keyframes entra{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+.app h4{font:700 22px/1 Orbitron;color:var(--cy);margin-bottom:20px}
+.campo{display:grid;grid-template-columns:240px 140px;align-items:center;gap:16px;margin-bottom:10px;font:600 14px/1 Inter;color:#d5dde8}
+.campo b{height:38px;border-radius:8px;border:1px solid rgba(45,226,255,.3);background:#030a10;display:grid;place-items:center;font:700 16px/1 'JetBrains Mono';color:var(--au)}
+.chk{display:flex;gap:18px;margin-top:16px;font:700 13px/1 'JetBrains Mono'}
+.chk span::before{content:"✓";display:inline-grid;place-items:center;width:20px;height:20px;margin-right:8px;border-radius:5px;background:var(--cy);color:#02141b;font-weight:900}
+.central{display:grid;place-items:center;text-align:center;min-height:440px}
+.orbe{width:260px;height:260px;border-radius:50%;position:relative;margin-bottom:24px}
+.orbe::before{content:"";position:absolute;inset:0;border-radius:50%;border:1px solid rgba(45,226,255,.3);background:radial-gradient(circle,rgba(45,226,255,.45) 0,rgba(45,226,255,.08) 30%,transparent 62%)}
+.orbe::after{content:"";position:absolute;left:-14%;right:-14%;top:38%;height:24%;border-radius:50%;border:2px solid rgba(45,226,255,.45);animation:gira 9s linear infinite}
+@keyframes gira{to{transform:rotate(360deg)}}
+.central small{display:block;font:700 13px/1 Orbitron;letter-spacing:.45em;color:var(--cy);margin-bottom:10px}
+.central .ini{display:inline-block;margin-top:16px;padding:14px 28px;background:var(--cy);color:#02141b;border-radius:6px;font:700 13px/1 Orbitron;letter-spacing:.3em}
+table{width:100%;border-collapse:collapse;font:600 13px/1 'JetBrains Mono'}
+th{text-align:left;padding:12px 10px;color:var(--cy);font:700 11px/1 Inter;letter-spacing:.12em;text-transform:uppercase;background:rgba(45,226,255,.06)}
+td{padding:14px 10px;border-top:1px solid rgba(255,255,255,.06)}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.kpis div{padding:14px;border-radius:10px;border:1px solid rgba(45,226,255,.2);background:#030a10}
+.kpis small{display:block;font:600 10px/1 Orbitron;color:var(--dim);letter-spacing:.08em;text-transform:uppercase}
+.kpis b{display:block;margin-top:10px;font:700 20px/1 'JetBrains Mono';filter:blur(6px)}
+.grafs{display:grid;grid-template-columns:1.4fr 1fr;gap:12px}
+.grafs div{height:170px;border-radius:10px;border:1px solid rgba(45,226,255,.2);background:#030a10;padding:12px}
+.grafs svg{width:100%;height:100%}
+.oculto{margin-top:10px;font:600 11px/1 'JetBrains Mono';color:var(--dim)}
+.il{font:600 11px/1 'JetBrains Mono';color:var(--dim);text-align:right;padding:10px 16px;border-top:1px solid var(--line)}
+/* bento */
+.bento{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:56px}
+.card{position:relative;padding:28px 26px;border-radius:var(--r);background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.015));border:1px solid var(--line);overflow:hidden;transition:transform .3s,border-color .3s}
+.card:hover{transform:translateY(-6px);border-color:rgba(45,226,255,.45)}
+.card::before{content:"";position:absolute;inset:0;background:radial-gradient(380px circle at var(--mx,50%) var(--my,0%),rgba(45,226,255,.13),transparent 45%);opacity:0;transition:opacity .3s}
+.card:hover::before{opacity:1}
+.card .ic{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;background:rgba(45,226,255,.1);border:1px solid rgba(45,226,255,.3);font-size:24px;margin-bottom:18px}
+.card h3{font-size:19px;margin-bottom:8px}
+.card p{color:#a9b4c4;font-size:15px}
+.card.w2{grid-column:span 2}
+.card.dest{background:linear-gradient(135deg,rgba(45,226,255,.12),rgba(245,197,66,.06));border-color:rgba(45,226,255,.35)}
+.num-g{font:900 54px/1 Orbitron;color:var(--cy)}
+/* controle interativo */
+.ctrl{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;margin-top:50px}
+.painel{padding:34px;border-radius:24px;background:var(--bg2);border:1px solid rgba(45,226,255,.25);box-shadow:0 0 60px rgba(45,226,255,.08)}
+.painel .lin{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;font-weight:700}
+.painel .val{font:400 44px/1 Anton;color:var(--au)}
+input[type=range]{width:100%;-webkit-appearance:none;height:10px;border-radius:5px;background:linear-gradient(90deg,var(--gr),var(--au));outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;border-radius:50%;background:#fff;box-shadow:0 0 0 6px rgba(45,226,255,.25),0 6px 14px rgba(0,0,0,.5);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:30px;height:30px;border-radius:50%;background:#fff;border:0}
+.sw{margin-top:30px;padding-top:26px;border-top:1px solid var(--line);display:flex;align-items:center;gap:16px;font-weight:700}
+.tg{margin-left:auto;width:74px;height:40px;border-radius:20px;background:var(--gr);position:relative;cursor:pointer;transition:background .3s}
+.tg i{position:absolute;top:4px;left:38px;width:32px;height:32px;border-radius:50%;background:#fff;transition:left .3s}
+.tg.off{background:#39414f}.tg.off i{left:4px}
+.st{font:700 13px/1 'JetBrains Mono';color:var(--gr);min-width:94px;text-align:right}
+.st.off{color:var(--dim)}
+.lista-ok li{list-style:none;display:flex;gap:14px;margin-bottom:18px;font-size:18px}
+.lista-ok li::before{content:"✓";flex:none;width:30px;height:30px;border-radius:50%;background:rgba(43,214,123,.15);border:1px solid var(--gr);color:var(--gr);display:grid;place-items:center;font-weight:900}
+/* para quem */
+.quem{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:50px}
+.quem>div{padding:36px;border-radius:24px;border:1px solid var(--line);background:var(--bg2)}
+.quem h3{font-size:24px;margin-bottom:22px}
+.quem .sim{border-color:rgba(43,214,123,.35)}
+.quem .nao{border-color:rgba(255,77,94,.3)}
+.quem .nao li::before{content:"✕";background:rgba(255,77,94,.12);border-color:var(--red);color:var(--red)}
+/* comparativo */
+.cmp{margin-top:50px;border-radius:24px;overflow:hidden;border:1px solid var(--line)}
+.cmp .r{display:grid;grid-template-columns:1.3fr 1fr 1fr;align-items:center;border-top:1px solid var(--line)}
+.cmp .r:first-child{border-top:0;background:rgba(255,255,255,.03)}
+.cmp .r>div{padding:20px 24px;font-weight:600}
+.cmp .r>div:nth-child(3){background:rgba(45,226,255,.06);color:#fff}
+.cmp .h{font:800 15px/1 Inter;letter-spacing:.06em;text-transform:uppercase}
+.cmp .h.j{color:var(--cy)}
+.x{color:var(--red);font-weight:900}.v{color:var(--gr);font-weight:900}
+/* oferta */
+.oferta{display:grid;grid-template-columns:1.1fr 1fr;gap:40px;align-items:center;margin-top:50px}
+.preco{position:relative;padding:46px 40px;border-radius:30px;text-align:center;background:linear-gradient(180deg,rgba(245,197,66,.12),rgba(4,7,11,.9));border:2px solid var(--au);box-shadow:0 0 100px rgba(245,197,66,.18)}
+.preco .fita{position:absolute;top:-16px;left:50%;transform:translateX(-50%);padding:9px 20px;border-radius:999px;background:var(--au);color:#1a1300;font:900 13px/1 Inter;letter-spacing:.12em;white-space:nowrap}
+.preco small{display:block;font:700 13px/1 'JetBrains Mono';letter-spacing:.2em;color:var(--au)}
+.preco .mens{margin-top:18px;color:var(--dim);font-weight:700}
+.preco .mens s{text-decoration-color:var(--red);text-decoration-thickness:3px}
+.preco .v{display:block;margin:4px 0 2px;font:400 120px/1 Anton;color:#fff;text-shadow:0 0 40px rgba(245,197,66,.4)}
+.preco .v sup{font-size:44px;color:var(--au);vertical-align:top;margin-right:8px;position:relative;top:18px}
+.preco .tipo{font:800 16px/1.3 Inter;color:var(--au);letter-spacing:.08em;text-transform:uppercase}
+.preco .btn{width:100%;margin-top:28px}
+.inclui li{list-style:none;display:flex;gap:14px;padding:16px 0;border-bottom:1px solid var(--line);font-size:17px}
+.inclui li::before{content:"✓";flex:none;color:var(--gr);font-weight:900}
+/* garantia */
+.gar{display:grid;grid-template-columns:240px 1fr;gap:44px;align-items:center;padding:46px;border-radius:30px;border:1px solid rgba(43,214,123,.35);background:linear-gradient(135deg,rgba(43,214,123,.08),transparent)}
+.selo{width:220px;height:220px;position:relative;display:grid;place-items:center;animation:gira 30s linear infinite}
+.selo svg{position:absolute;inset:0}
+.selo div{animation:gira 30s linear infinite reverse;text-align:center}
+.selo b{display:block;font:400 92px/1 Anton}
+.selo small{font:800 13px/1.2 Inter;color:var(--gr);letter-spacing:.1em}
+/* faq */
+.faq{max-width:860px;margin:50px auto 0}
+.faq details{border:1px solid var(--line);border-radius:16px;margin-bottom:12px;background:var(--bg2);overflow:hidden}
+.faq summary{list-style:none;cursor:pointer;padding:22px 26px;font-weight:700;font-size:18px;display:flex;align-items:center;gap:16px}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";margin-left:auto;font:400 30px/1 Inter;color:var(--cy);transition:transform .3s}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details p{padding:0 26px 24px;color:#b2bccb}
+/* final */
+.final{text-align:center}
+footer{padding:50px 0 120px;border-top:1px solid var(--line);color:#7f8a9c;font-size:13px;text-align:center}
+footer p{max-width:880px;margin:0 auto 10px}
+/* barra fixa mobile */
+.fixa{position:fixed;left:0;right:0;bottom:0;z-index:60;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:rgba(4,7,11,.92);backdrop-filter:blur(12px);border-top:1px solid var(--line);display:flex;align-items:center;gap:14px;transform:translateY(110%);transition:transform .4s}
+.fixa.on{transform:none}
+.fixa .p{font:400 30px/1 Anton}
+.fixa .p small{display:block;font:700 10px/1.2 'JetBrains Mono';color:var(--dim);letter-spacing:.06em}
+.fixa .btn{margin-left:auto;padding:16px 22px;font-size:14px}
+/* revelar */
+.rv{opacity:0;transform:translateY(40px)}
+@media (max-width:900px){
+  .dores,.bento,.ctrl,.quem,.oferta,.gar{grid-template-columns:1fr}
+  .card.w2{grid-column:auto}
+  .app .corpo{grid-template-columns:1fr}.app nav{display:flex;overflow-x:auto;gap:6px;border-right:0;border-bottom:1px solid var(--line)}
+  .app nav .marca{display:none}.app nav button{white-space:nowrap;width:auto}
+  .campo{grid-template-columns:1fr 90px}.kpis{grid-template-columns:repeat(2,1fr)}.grafs{grid-template-columns:1fr}
+  .cmp .r{grid-template-columns:1.1fr .9fr .9fr}.cmp .r>div{padding:14px 12px;font-size:14px}
+  .gar{text-align:center;justify-items:center}
+  section{padding:80px 0}
+  header .tag{display:none}
+}
+@media (min-width:901px){.fixa{display:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+</style>
+</head>
+<body>
+<div id="fx"><div class="grid"></div><div class="b b1"></div><div class="b b2"></div></div>
+<div id="cursor-glow"></div>
+
+<header><div class="wrap"><a class="logo" href="#topo"><svg class="esf" viewBox="0 0 100 100" aria-hidden="true"><defs><radialGradient id="nucJ" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#bff7ff" stop-opacity="1"/><stop offset=".25" stop-color="#2de2ff" stop-opacity=".75"/><stop offset=".7" stop-color="#0a5a6e" stop-opacity=".25"/><stop offset="1" stop-color="#04070b" stop-opacity="0"/></radialGradient></defs><circle cx="50" cy="50" r="47" fill="none" stroke="rgba(45,226,255,.35)" stroke-width="1.2"/><circle cx="50" cy="50" r="30" fill="url(#nucJ)"/><g class="pts" fill="rgba(170,240,255,.85)"><circle cx="55.5" cy="50.0" r="0.9"/><circle cx="42.9" cy="55.8" r="1.2"/><circle cx="51.1" cy="38.9" r="1.6"/><circle cx="58.9" cy="60.5" r="0.9"/><circle cx="33.6" cy="47.4" r="1.2"/><circle cx="65.5" cy="41.1" r="1.6"/><circle cx="44.8" cy="67.4" r="0.9"/><circle cx="40.1" cy="32.8" r="1.2"/><circle cx="71.5" cy="57.1" r="1.6"/><circle cx="27.7" cy="58.3" r="0.9"/><circle cx="60.8" cy="29.3" r="1.2"/><circle cx="58.0" cy="72.8" r="1.6"/><circle cx="26.0" cy="37.5" r="0.9"/><circle cx="78.2" cy="44.4" r="1.2"/><circle cx="32.8" cy="72.0" r="1.6"/><circle cx="46.0" cy="22.4" r="0.9"/><circle cx="74.4" cy="68.5" r="1.2"/><circle cx="17.2" cy="51.2" r="1.6"/><circle cx="73.9" cy="28.6" r="0.9"/><circle cx="48.4" cy="81.1" r="1.2"/><circle cx="27.2" cy="25.5" r="1.6"/><circle cx="86.0" cy="54.4" r="0.9"/><circle cx="19.5" cy="69.1" r="1.2"/><circle cx="58.3" cy="16.6" r="1.6"/><circle cx="69.3" cy="80.3" r="0.9"/><circle cx="12.3" cy="39.2" r="1.2"/></g><line x1="28" y1="96" x2="74" y2="4" stroke="rgba(45,226,255,.3)" stroke-width="1" stroke-dasharray="3 3"/><g class="anelJ"><ellipse cx="50" cy="50" rx="45" ry="16" fill="none" stroke="#2de2ff" stroke-width="2" transform="rotate(14 50 50)"/><circle cx="94" cy="58" r="2.2" fill="#e8fdff"/></g></svg>JARVIS TRADER</a><span class="tag">pagamento único · <b>R$ 67</b> · vitalício</span><a href="#oferta" class="btn btn-sm">Quero o meu</a></div></header>
+
+<!-- HERO -->
+<section class="hero" id="topo">
+  <div class="wrap">
+    <span class="kicker rv">Inteligência artificial · cripto · spot 24h</span>
+    <h1 class="rv">O robô que opera cripto por você, <em>24 horas por dia</em>, seguindo as regras que você define.</h1>
+    <p class="sub rv">Assista ao vídeo e veja o Jarvis Trader por dentro, tela por tela: conexão com a OKX, gestão de risco, histórico, desempenho e segurança.</p>
+    <div class="vsl rv" id="vsl">
+      <video id="vid" src="vsl.mp4" poster="poster.jpg" playsinline preload="metadata"></video>
+      <div class="play" id="play"><span></span></div>
+      <div class="som">▶ clique para assistir com som</div>
+    </div>
+    <a href="#oferta" class="btn pulsa rv">Quero meu Jarvis</a>
+    <p class="micro rv">Pagamento único de R$ 67 · acesso vitalício · <b>7 dias de garantia</b></p>
+    <div class="selos rv">
+      <span><svg viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/></svg>Compra segura</span>
+      <span><svg viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>Pagamento único, sem mensalidade</span>
+      <span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>7 dias para testar</span>
+    </div>
+  </div>
+</section>
+
+<div class="marq"><div class="trilho"><span>BTC-USDT</span><span>ETH-USDT</span><span>SOL-USDT</span><span>MERCADO SPOT</span><span>24/7</span><span>GESTÃO DE RISCO</span><span>CONVERSA POR VOZ</span><span>COTADO EM DÓLAR</span><span>BTC-USDT</span><span>ETH-USDT</span><span>SOL-USDT</span><span>MERCADO SPOT</span><span>24/7</span><span>GESTÃO DE RISCO</span><span>CONVERSA POR VOZ</span><span>COTADO EM DÓLAR</span></div></div>
+
+<!-- PROBLEMA -->
+<section id="problema">
+  <div class="wrap center">
+    <span class="kicker rv">O problema</span>
+    <h2 class="rv">Se você já tentou operar cripto sozinho, <em>você conhece essa sensação</em>.</h2>
+    <div class="dores">
+      <div class="dor rv"><div class="n">01</div><h3>Horas na frente do gráfico</h3><p>Você perde o dia olhando vela subir e descer, e mesmo assim sente que perdeu o movimento.</p></div>
+      <div class="dor rv"><div class="n">02</div><h3>Entra atrasado</h3><p>Quando decide entrar, a oportunidade já passou. Você estava dormindo, trabalhando ou em dúvida.</p></div>
+      <div class="dor rv"><div class="n">03</div><h3>Sai no desespero</h3><p>Medo e ansiedade decidem por você. No fim do dia, nem dá para explicar o que fez.</p></div>
+    </div>
+    <p class="virada rv">O problema não é você. É que <b>nenhum ser humano</b> consegue vigiar o mercado 24h, sem cansar e sem emoção.</p>
+  </div>
+</section>
+
+<!-- COMO FUNCIONA -->
+<section id="como">
+  <div class="wrap">
+    <div class="center"><span class="kicker rv">Como funciona</span><h2 class="rv">Três passos e o <em>Jarvis assume o operacional</em>.</h2></div>
+    <div class="passos" id="passos">
+      <div class="linha"><i id="linhaProg"></i></div>
+      <div class="passo"><div class="num">1</div><h3>Conecte a sua OKX</h3><p>Na aba Minha OKX você liga a sua conta da corretora. O dinheiro continua na sua conta, no seu nome. O Jarvis envia as ordens.</p></div>
+      <div class="passo"><div class="num">2</div><h3>Defina as suas regras</h3><p>Risco por operação, perda máxima do dia, exposição por ativo, risco-retorno mínimo, posições e entradas por dia. Você manda.</p></div>
+      <div class="passo"><div class="num">3</div><h3>Ligue o Jarvis</h3><p>Toque em Iniciar Jarvis. Ele monitora BTC, ETH e SOL no mercado spot, 24 horas por dia, e só entra quando a oportunidade atinge a nota mínima que você definiu.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- POR DENTRO -->
+<section id="dentro">
+  <div class="wrap">
+    <div class="center"><span class="kicker rv">Por dentro do sistema</span><h2 class="rv">Clique nas abas e <em>veja o Jarvis por dentro</em>.</h2></div>
+    <div class="app rv" id="app">
+      <div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="u">🔒 Jarvis Trader · painel</span></div>
+      <div class="corpo">
+        <nav id="abas">
+          <div class="marca">JARVIS TRADER</div>
+          <button data-p="c" class="on">◉ Central</button>
+          <button data-p="r">⚖ Gestão de risco</button>
+          <button data-p="h">↺ Histórico</button>
+          <button data-p="d">📈 Desempenho</button>
+          <button data-p="s">🛡 Segurança</button>
+        </nav>
+        <div class="tela">
+          <div class="pg on" data-p="c"><div class="central"><div><div class="orbe" style="margin:0 auto 24px"></div><small>EM REPOUSO</small><div>Toque em Iniciar para ativar microfone e voz</div><span class="ini">INICIAR JARVIS</span></div></div></div>
+          <div class="pg" data-p="r"><h4>Gestão de risco</h4>
+            <div class="campo">Pontuação mínima<b>80</b></div><div class="campo">Risco por operação (%)<b>1</b></div><div class="campo">Perda diária máxima (%)<b>2</b></div>
+            <div class="campo">Exposição por ativo (%)<b>25</b></div><div class="campo">Relação risco-retorno mínima<b>2</b></div><div class="campo">Posições máximas<b>3</b></div><div class="campo">Entradas máximas por dia<b>3</b></div>
+            <div class="chk"><span>BTC-USDT</span><span>ETH-USDT</span><span>SOL-USDT</span></div></div>
+          <div class="pg" data-p="h"><h4>Histórico</h4>
+            <table><tr><th>Ativo</th><th>Entrada</th><th>Saída</th><th>Preço</th><th>Stop</th><th>Alvo</th></tr>
+              <tr><td>SOL-USDT</td><td>12/11 15:48</td><td>12/11 17:11</td><td>180.47</td><td>179.02</td><td>183.35</td></tr>
+              <tr><td>SOL-USDT</td><td>12/11 17:38</td><td>12/11 18:51</td><td>179.97</td><td>178.53</td><td>182.85</td></tr>
+              <tr><td>BTC-USDT</td><td>12/11 19:02</td><td>12/11 20:23</td><td>98 214</td><td>97 590</td><td>99 460</td></tr>
+              <tr><td>ETH-USDT</td><td>12/11 20:40</td><td>12/11 22:30</td><td>3 412.5</td><td>3 371.0</td><td>3 495.5</td></tr></table></div>
+          <div class="pg" data-p="d"><h4>Desempenho</h4>
+            <div class="kpis"><div><small>PNL líquido</small><b>US$ ••••</b></div><div><small>Taxa de acerto</small><b>•• %</b></div><div><small>Taxas pagas</small><b>US$ ••</b></div><div><small>Operações</small><b>••</b></div></div>
+            <div class="grafs"><div><svg viewBox="0 0 400 150" preserveAspectRatio="none"><path d="M5 135 C 70 110,110 80,160 55 S 240 65,270 88 S 340 45,395 25" fill="none" stroke="#2de2ff" stroke-width="4"/></svg></div>
+              <div><svg viewBox="0 0 200 150"><rect x="25" y="30" width="40" height="80" fill="#2bd67b"/><rect x="85" y="70" width="40" height="40" fill="#2bd67b"/><rect x="145" y="110" width="40" height="28" fill="#ff4d5e"/><line x1="10" y1="110" x2="195" y2="110" stroke="#334"/></svg></div></div>
+            <p class="oculto">valores ocultos nesta página · o painel mostra todos os seus números, inclusive as perdas</p></div>
+          <div class="pg" data-p="s"><h4>Segurança</h4>
+            <div class="campo">Senha atual<b style="color:#eef3f8">••••••••</b></div><div class="campo">Nova senha<b style="color:#eef3f8">••••••••</b></div>
+            <div class="chk" style="gap:12px"><span style="font-family:Inter">Exportar meus dados</span><span style="font-family:Inter">Encerrar todas as sessões</span></div></div>
+        </div>
+      </div>
+      <div class="il">interface ilustrativa</div>
+    </div>
+  </div>
+</section>
+
+<!-- RECURSOS -->
+<section id="recursos">
+  <div class="wrap">
+    <div class="center"><span class="kicker rv">Recursos</span><h2 class="rv">Tudo o que um robô sério <em>precisa ter</em>.</h2></div>
+    <div class="bento">
+      <div class="card w2 dest rv"><div class="ic">🎙️</div><h3>Você conversa com o seu robô</h3><p>Toque em Iniciar Jarvis e ele ativa microfone e voz. Pergunte como está o mercado e ele responde.</p></div>
+      <div class="card rv"><div class="num-g" data-conta="24">0</div><h3>horas por dia</h3><p>O Jarvis vigia o mercado enquanto você dorme, trabalha e vive.</p></div>
+      <div class="card rv"><div class="num-g" data-conta="3">0</div><h3>ativos monitorados</h3><p>Bitcoin, Ethereum e Solana, no mercado spot, cotados em dólar.</p></div>
+      <div class="card rv"><div class="ic">🎯</div><h3>Pontuação mínima</h3><p>Ele só entra quando a oportunidade atinge a nota que você definiu.</p></div>
+      <div class="card rv"><div class="ic">⏸️</div><h3>Trava de perda diária</h3><p>Bateu o limite do dia? Ele para sozinho, sem tentar recuperar no impulso.</p></div>
+      <div class="card w2 rv"><div class="num-g" data-conta="7">0</div><h3>regras de risco configuráveis</h3><p>Risco por operação, perda diária máxima, exposição por ativo, risco-retorno mínimo, posições máximas, entradas por dia e nota mínima.</p></div>
+      <div class="card rv"><div class="ic">🧾</div><h3>Histórico completo</h3><p>Cada entrada e saída com horário, preço, stop e alvo.</p></div>
+      <div class="card rv"><div class="ic">📊</div><h3>Desempenho transparente</h3><p>Curva de patrimônio, resultado por ativo, taxa de acerto e taxas. O que deu certo e o que deu errado.</p></div>
+      <div class="card rv"><div class="ic">🔐</div><h3>Seu dinheiro na sua conta</h3><p>Os recursos ficam na sua conta OKX, no seu nome.</p></div>
+      <div class="card rv"><div class="ic">🛡️</div><h3>Segurança</h3><p>Troque a senha, exporte seus dados e encerre todas as sessões com um clique.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTROLE -->
+<section id="controle">
+  <div class="wrap">
+    <div class="ctrl">
+      <div>
+        <span class="kicker rv">Você no controle</span>
+        <h2 class="rv">Quem manda <em>é você</em>.</h2>
+        <p class="sub rv">O Jarvis executa, mas as regras são suas. Ajuste o risco, acompanhe cada operação e desligue quando quiser. Experimente ao lado.</p>
+        <ul class="lista-ok rv" style="margin-top:28px"><li>Você define quanto arrisca por operação</li><li>Você escolhe os ativos monitorados</li><li>Você liga e desliga a automação a qualquer momento</li></ul>
+      </div>
+      <div class="painel rv">
+        <div class="lin"><span>Risco por operação</span><span class="val"><span id="rv">1</span>%</span></div>
+        <input type="range" min="0.5" max="5" step="0.5" value="1" id="risco">
+        <div class="lin" style="margin-top:26px"><span>Perda diária máxima</span><span class="val"><span id="pv">2</span>%</span></div>
+        <input type="range" min="1" max="10" step="1" value="2" id="perda">
+        <div class="sw">Automação <span class="st" id="st">LIGADA</span><div class="tg" id="tg"><i></i></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PARA QUEM -->
+<section id="quem">
+  <div class="wrap">
+    <div class="center"><span class="kicker rv">Sem enrolação</span><h2 class="rv">O Jarvis <em>não é pra todo mundo</em>.</h2></div>
+    <div class="quem">
+      <div class="sim rv"><h3>É pra você se…</h3><ul class="lista-ok"><li>cansou de operar no emocional</li><li>quer um sistema que segue regras, todos os dias</li><li>não tem tempo de ficar o dia na frente do gráfico</li><li>quer acompanhar tudo com transparência</li></ul></div>
+      <div class="nao rv"><h3>Não é pra você se…</h3><ul class="lista-ok"><li>quer ficar rico amanhã</li><li>procura lucro garantido (ele não existe em cripto)</li><li>não aceita que o mercado tem risco</li><li>vai usar dinheiro que não pode perder</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARATIVO -->
+<section id="comparativo">
+  <div class="wrap">
+    <div class="center"><span class="kicker rv">Faça as contas</span><h2 class="rv">Mensalidade todo mês <em>ou pagamento único</em>?</h2></div>
+    <div class="cmp rv">
+      <div class="r"><div></div><div class="h">Robôs com mensalidade</div><div class="h j">Jarvis Trader</div></div>
+      <div class="r"><div>Forma de pagamento</div><div><span class="x">✕</span> Todo mês, para sempre</div><div><span class="v">✓</span> Pagamento único</div></div>
+      <div class="r"><div>Acesso</div><div><span class="x">✕</span> Enquanto você pagar</div><div><span class="v">✓</span> Vitalício</div></div>
+      <div class="r"><div>Gestão de risco configurável</div><div>Varia</div><div><span class="v">✓</span> 7 regras</div></div>
+      <div class="r"><div>Conversa por voz</div><div>Raro</div><div><span class="v">✓</span> Sim</div></div>
+      <div class="r"><div>Garantia para testar</div><div>Varia</div><div><span class="v">✓</span> 7 dias</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- OFERTA -->
+<section id="oferta">
+  <div class="wrap">
+    <div class="center"><span class="kicker rv">A oferta</span><h2 class="rv">Tenha o Jarvis <em>para sempre</em>.</h2></div>
+    <div class="oferta">
+      <ul class="inclui rv">
+        <li>Acesso vitalício ao Jarvis Trader PRO</li>
+        <li>Central com conversa por voz</li>
+        <li>Conexão com a sua conta OKX</li>
+        <li>Gestão de risco completa (7 regras)</li>
+        <li>Operações, histórico e desempenho detalhados</li>
+        <li>Área de segurança da conta</li>
+        <li>7 dias de garantia para testar</li>
+      </ul>
+      <div class="preco rv" id="cartPreco">
+        <span class="fita">SEM MENSALIDADE</span>
+        <small>JARVIS TRADER · PRO</small>
+        <div class="mens">nada de <s>mensalidade</s></div>
+        <span class="v"><sup>R$</sup><span id="precoN">67</span></span>
+        <div class="tipo">Pagamento único · acesso vitalício</div>
+        <!-- TROCAR o href pelo link do checkout quando estiver pronto -->
+        <a href="#" class="btn pulsa" id="btnComprar" data-checkout="">Quero meu Jarvis agora</a>
+        <p class="micro">Compra segura · <b>7 dias de garantia</b></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GARANTIA -->
+<section id="garantia">
+  <div class="wrap">
+    <div class="gar rv">
+      <div class="selo"><svg viewBox="0 0 220 220"><circle cx="110" cy="110" r="104" fill="none" stroke="#2bd67b" stroke-width="3" stroke-dasharray="6 6"/><circle cx="110" cy="110" r="90" fill="#0b1a12" stroke="#fff" stroke-width="3"/></svg><div><b>7</b><small>DIAS DE<br>GARANTIA</small></div></div>
+      <div><span class="kicker" style="border-color:rgba(43,214,123,.4);color:var(--gr)">Risco zero para testar</span><h2 style="font-size:clamp(30px,4vw,44px)">Testou e não gostou? <em>Reembolso de 100%.</em></h2><p class="sub">Você tem 7 dias para conhecer o Jarvis por dentro. Se não for para você, é só pedir o reembolso dentro do prazo e você recebe o valor integral de volta.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="wrap">
+    <div class="center"><span class="kicker rv">Dúvidas</span><h2 class="rv">Perguntas <em>frequentes</em></h2></div>
+    <div class="faq">
+      <details class="rv"><summary>Preciso entender de trade para usar?</summary><p>Não. Você configura as regras de risco em uma tela simples e o Jarvis faz a análise e a execução das ordens. Recomendamos começar com valores baixos até se familiarizar.</p></details>
+      <details class="rv"><summary>Onde fica o meu dinheiro?</summary><p>Na sua própria conta da corretora OKX, no seu nome. O Jarvis se conecta à sua conta para enviar as ordens de compra e venda no mercado spot.</p></details>
+      <details class="rv"><summary>O Jarvis garante lucro?</summary><p>Não. Nenhum robô garante lucro. O mercado de criptomoedas tem risco e você pode ter perdas. O Jarvis segue as regras de risco que você definir e registra tudo, inclusive as operações que dão errado.</p></details>
+      <details class="rv"><summary>Posso desligar quando quiser?</summary><p>Sim. A automação liga e desliga a qualquer momento, e você pode mudar as regras de risco quando quiser.</p></details>
+      <details class="rv"><summary>Tem mensalidade?</summary><p>Não. É pagamento único de R$ 67, com acesso vitalício.</p></details>
+      <details class="rv"><summary>E se eu não gostar?</summary><p>Você tem 7 dias de garantia. Peça o reembolso dentro do prazo e recebe 100% do valor de volta.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL -->
+<section class="final">
+  <div class="wrap">
+    <h2 class="rv">Ligue o seu <em>Jarvis</em> ainda hoje.</h2>
+    <p class="sub rv" style="margin:0 auto 34px">Pagamento único de R$ 67, acesso vitalício e 7 dias para testar.</p>
+    <a href="#oferta" class="btn pulsa rv">Quero meu Jarvis</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="logo" style="justify-content:center;margin-bottom:26px"><svg class="esf" viewBox="0 0 100 100" aria-hidden="true"><defs><radialGradient id="nucJ2" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#bff7ff" stop-opacity="1"/><stop offset=".25" stop-color="#2de2ff" stop-opacity=".75"/><stop offset=".7" stop-color="#0a5a6e" stop-opacity=".25"/><stop offset="1" stop-color="#04070b" stop-opacity="0"/></radialGradient></defs><circle cx="50" cy="50" r="47" fill="none" stroke="rgba(45,226,255,.35)" stroke-width="1.2"/><circle cx="50" cy="50" r="30" fill="url(#nucJ2)"/><g class="pts" fill="rgba(170,240,255,.85)"><circle cx="55.5" cy="50.0" r="0.9"/><circle cx="42.9" cy="55.8" r="1.2"/><circle cx="51.1" cy="38.9" r="1.6"/><circle cx="58.9" cy="60.5" r="0.9"/><circle cx="33.6" cy="47.4" r="1.2"/><circle cx="65.5" cy="41.1" r="1.6"/><circle cx="44.8" cy="67.4" r="0.9"/><circle cx="40.1" cy="32.8" r="1.2"/><circle cx="71.5" cy="57.1" r="1.6"/><circle cx="27.7" cy="58.3" r="0.9"/><circle cx="60.8" cy="29.3" r="1.2"/><circle cx="58.0" cy="72.8" r="1.6"/><circle cx="26.0" cy="37.5" r="0.9"/><circle cx="78.2" cy="44.4" r="1.2"/><circle cx="32.8" cy="72.0" r="1.6"/><circle cx="46.0" cy="22.4" r="0.9"/><circle cx="74.4" cy="68.5" r="1.2"/><circle cx="17.2" cy="51.2" r="1.6"/><circle cx="73.9" cy="28.6" r="0.9"/><circle cx="48.4" cy="81.1" r="1.2"/><circle cx="27.2" cy="25.5" r="1.6"/><circle cx="86.0" cy="54.4" r="0.9"/><circle cx="19.5" cy="69.1" r="1.2"/><circle cx="58.3" cy="16.6" r="1.6"/><circle cx="69.3" cy="80.3" r="0.9"/><circle cx="12.3" cy="39.2" r="1.2"/></g><line x1="28" y1="96" x2="74" y2="4" stroke="rgba(45,226,255,.3)" stroke-width="1" stroke-dasharray="3 3"/><g class="anelJ"><ellipse cx="50" cy="50" rx="45" ry="16" fill="none" stroke="#2de2ff" stroke-width="2" transform="rotate(14 50 50)"/><circle cx="94" cy="58" r="2.2" fill="#e8fdff"/></g></svg>JARVIS TRADER</div>
+    <p><b>Aviso de risco:</b> operações com criptoativos envolvem alto risco e podem resultar na perda de parte ou de todo o capital. Resultados passados não garantem resultados futuros. O Jarvis Trader é uma ferramenta de automação e não constitui recomendação de investimento.</p>
+    <p>As interfaces exibidas nesta página são ilustrativas. OKX é marca de seus respectivos titulares.</p>
+    <p>© Jarvis Trader · Termos de uso · Política de privacidade</p>
+  </div>
+</footer>
+
+<div class="fixa" id="fixa"><div class="p">R$ 67<small>PAGAMENTO ÚNICO · VITALÍCIO</small></div><a href="#oferta" class="btn">Quero o meu</a></div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/ScrollTrigger.min.js"></script>
+<script>
+gsap.registerPlugin(ScrollTrigger);
+const reduz = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// revelar ao rolar (em grupo)
+if (!reduz) {
+  ScrollTrigger.batch('.rv', { start: 'top 88%', onEnter: (els) => gsap.to(els, { opacity: 1, y: 0, duration: .8, ease: 'power3.out', stagger: .09, overwrite: true }) });
+} else { document.querySelectorAll('.rv').forEach((e) => { e.style.opacity = 1; e.style.transform = 'none'; }); }
+
+// parallax do fundo
+gsap.to('#fx .b1', { y: 300, ease: 'none', scrollTrigger: { start: 0, end: 'max', scrub: 1 } });
+gsap.to('#fx .b2', { y: -260, ease: 'none', scrollTrigger: { start: 0, end: 'max', scrub: 1 } });
+
+// linha de progresso dos passos + passos acendendo
+gsap.to('#linhaProg', { height: '100%', ease: 'none', scrollTrigger: { trigger: '#passos', start: 'top 70%', end: 'bottom 55%', scrub: true } });
+document.querySelectorAll('.passo').forEach((p) => ScrollTrigger.create({ trigger: p, start: 'top 62%', onEnter: () => p.classList.add('on'), onLeaveBack: () => p.classList.remove('on') }));
+
+// mockup: entra em 3D e inclina com o mouse
+gsap.fromTo('#app', { rotationX: 22, scale: .92, transformPerspective: 1400 }, { rotationX: 0, scale: 1, ease: 'none', scrollTrigger: { trigger: '#app', start: 'top 95%', end: 'top 35%', scrub: true } });
+const app = document.getElementById('app');
+app.addEventListener('mousemove', (e) => { const r = app.getBoundingClientRect(); const x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5; gsap.to(app, { rotationY: x * 6, rotationX: -y * 5, transformPerspective: 1400, duration: .5 }); });
+app.addEventListener('mouseleave', () => gsap.to(app, { rotationY: 0, rotationX: 0, duration: .6 }));
+
+// abas do mockup (clique + troca automatica ate o usuario clicar)
+const abas = [...document.querySelectorAll('#abas button')];
+let auto = true, idx = 0;
+const abre = (k) => { abas.forEach((b, j) => b.classList.toggle('on', j === k)); const p = abas[k].dataset.p; document.querySelectorAll('.pg').forEach((g) => g.classList.toggle('on', g.dataset.p === p)); };
+abas.forEach((b, k) => b.addEventListener('click', () => { auto = false; abre(k); }));
+setInterval(() => { if (auto && ScrollTrigger.isInViewport(app)) { idx = (idx + 1) % abas.length; abre(idx); } }, 3200);
+
+// contadores
+document.querySelectorAll('[data-conta]').forEach((el) => {
+  const alvo = +el.dataset.conta;
+  ScrollTrigger.create({ trigger: el, start: 'top 90%', once: true, onEnter: () => gsap.fromTo(el, { textContent: 0 }, { textContent: alvo, duration: 1.4, ease: 'power2.out', snap: { textContent: 1 } }) });
+});
+
+// brilho que segue o mouse nos cards
+document.querySelectorAll('.card').forEach((c) => c.addEventListener('mousemove', (e) => { const r = c.getBoundingClientRect(); c.style.setProperty('--mx', (e.clientX - r.left) + 'px'); c.style.setProperty('--my', (e.clientY - r.top) + 'px'); }));
+const glow = document.getElementById('cursor-glow');
+addEventListener('mousemove', (e) => { glow.style.left = e.clientX + 'px'; glow.style.top = e.clientY + 'px'; });
+
+// painel interativo de controle
+const rs = document.getElementById('risco'), pd = document.getElementById('perda');
+rs.addEventListener('input', () => { document.getElementById('rv').textContent = String(rs.value).replace('.', ','); });
+pd.addEventListener('input', () => { document.getElementById('pv').textContent = pd.value; });
+const tg = document.getElementById('tg'), st = document.getElementById('st');
+tg.addEventListener('click', () => { const off = tg.classList.toggle('off'); st.classList.toggle('off', off); st.textContent = off ? 'DESLIGADA' : 'LIGADA'; });
+
+// preço entrando com impacto
+gsap.from('#cartPreco', { scale: .85, rotationY: 18, transformPerspective: 1400, ease: 'back.out(1.6)', duration: 1, scrollTrigger: { trigger: '#cartPreco', start: 'top 80%' } });
+
+// VSL: play com som
+const vid = document.getElementById('vid'), play = document.getElementById('play');
+play.addEventListener('click', () => { vid.controls = true; vid.play(); play.style.opacity = 0; play.style.pointerEvents = 'none'; document.querySelector('.vsl .som').style.display = 'none'; });
+
+// barra fixa no celular depois do vídeo
+ScrollTrigger.create({ trigger: '#vsl', start: 'bottom top', onEnter: () => document.getElementById('fixa').classList.add('on'), onLeaveBack: () => document.getElementById('fixa').classList.remove('on') });
+
+// checkout: enquanto não houver link, o botão leva para a oferta
+document.querySelectorAll('[data-checkout]').forEach((b) => b.addEventListener('click', (e) => { if (!b.dataset.checkout) { e.preventDefault(); document.getElementById('oferta').scrollIntoView({ behavior: 'smooth' }); } }));
+</script>
+</body>
+</html>
