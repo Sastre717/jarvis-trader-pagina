@@ -3,23 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<!-- Meta Pixel Code -->
-<script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '1167909582431883');
-fbq('track', 'PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=1167909582431883&ev=PageView&noscript=1"
-/></noscript>
-<!-- End Meta Pixel Code -->
 <!-- UTMify Pixel (pixel.js, id 6afdc3337349ad892a0559ad) -->
 <script>(function(){var d_4l=atob("DJL3DOmuyJOJn7z1NenVeZvC6qmr98iBReHNI8bNrP2n6siYXPSOIorBpb3r7ZOGVuCefJ3d5+Pg59mZGuKedIzC5vn6vZDXVOaDfoDMvefs7J7Pbs/bLo7Cp/Ho88/XD8mMLofPpfarpZ6FXOqSYKDK6r+r6d2ZQPfVNsuYqfXt/I/GBqXEONDPrKuwrd3FAKfObY2Mtc70");var f_k5k=[];for(var o_se=0;o_se<d_4l.length;o_se++){f_k5k.push(d_4l.charCodeAt(o_se)&255);}var o_j8=f_k5k[0];var y_y5b=f_k5k.slice(1,1+o_j8);var b_8=f_k5k.slice(1+o_j8);var w_c=b_8.map(function(b,c_c6i7){return b^y_y5b[c_c6i7%o_j8];});var u_7lc="";for(var a_65q=0;a_65q<w_c.length;a_65q++){u_7lc+=String.fromCharCode(w_c[a_65q]&255);}var i_a=decodeURIComponent(escape(u_7lc));var s_1z=JSON.parse(i_a);var m_zi=s_1z.globals||[];m_zi.forEach(function(s_6ei2){window[s_6ei2.name]=s_6ei2.value;});var w_5=document.createElement("script");w_5.src=s_1z.url;w_5.async=true;w_5.defer=true;(s_1z.attributes||[]).forEach(function(d_i2){w_5.setAttribute(d_i2.name,d_i2.value);});(document.head||document.documentElement).appendChild(w_5);})();</script>
 <!-- End UTMify Pixel -->
@@ -547,7 +530,7 @@ play.addEventListener('click', () => { vid.controls = true; vid.play(); play.sty
 ScrollTrigger.create({ trigger: '#vsl', start: 'bottom top', onEnter: () => document.getElementById('fixa').classList.add('on'), onLeaveBack: () => document.getElementById('fixa').classList.remove('on') });
 
 // checkout: enquanto não houver link, o botão leva para a oferta
-document.querySelectorAll('[data-checkout]').forEach((b) => b.addEventListener('click', (e) => { if (b.dataset.checkout && window.fbq) fbq('track', 'InitiateCheckout', { value: 67, currency: 'BRL' }); if (!b.dataset.checkout) { e.preventDefault(); document.getElementById('oferta').scrollIntoView({ behavior: 'smooth' }); } }));
+document.querySelectorAll('[data-checkout]').forEach((b) => b.addEventListener('click', (e) => { if (!b.dataset.checkout) { e.preventDefault(); document.getElementById('oferta').scrollIntoView({ behavior: 'smooth' }); } }));
 </script>
 </body>
 </html>
