@@ -387,6 +387,17 @@ footer p{max-width:880px;margin:0 auto 10px}
 .fixa .btn{margin-left:auto;padding:15px 18px;border-radius:12px;font-size:14px;box-shadow:0 0 30px rgba(45,226,255,.45),0 4px 0 #07627a}
 /* revelar */
 .js .rv{opacity:0;transform:translateY(36px)}
+/* depoimentos */
+.dep{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:50px}
+.dep .d{position:relative;display:flex;flex-direction:column;gap:22px;padding:32px 28px;border-radius:24px;background:linear-gradient(180deg,rgba(45,226,255,.06),rgba(255,255,255,.012));border:1px solid rgba(45,226,255,.22)}
+.dep .d::before{content:"“";position:absolute;top:6px;right:22px;font:900 96px/1 var(--tit);color:rgba(45,226,255,.16)}
+.dep blockquote{margin:0;padding-right:44px;font-size:18px;line-height:1.5;color:#e6edf5}
+.dep blockquote b{color:var(--cy);font-weight:700}
+.dep .q{display:flex;align-items:center;gap:12px;margin-top:auto;padding-top:18px;border-top:1px solid var(--line)}
+.dep .av{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font:800 18px/1 var(--tit);color:#02141b;background:linear-gradient(135deg,#a9f7ff,var(--cy))}
+.dep .q div b{display:block;font-size:16px}.dep .q div span{color:var(--dim);font-size:13px}
+.dep-nota{margin:28px auto 0;max-width:680px;color:var(--dim);font-size:13.5px;text-align:center}
+@media (max-width:900px){.dep{grid-template-columns:1fr}.dep .d{padding:26px 22px}}
 @media (max-width:900px){
   .dores,.bento,.cer,.seg,.calc,.claro,.quem,.oferta,.gar,.passos{grid-template-columns:minmax(0,1fr)}
   .term .log div{white-space:normal}
@@ -655,6 +666,19 @@ footer p{max-width:880px;margin:0 auto 10px}
       <div class="sim rv"><h3>É pra você se…</h3><ul class="lista-ok"><li>cansou de operar no emocional</li><li>quer um sistema que segue regras, todos os dias</li><li>não tem tempo de ficar o dia na frente do gráfico</li><li>quer acompanhar tudo com transparência</li></ul></div>
       <div class="nao rv"><h3>Não é pra você se…</h3><ul class="lista-ok"><li>quer ficar rico amanhã</li><li>procura lucro garantido (ele não existe em cripto)</li><li>não aceita que o mercado tem risco</li><li>vai usar dinheiro que não pode perder</li></ul></div>
     </div>
+  </div>
+</section>
+
+<!-- DEPOIMENTOS -->
+<section id="depoimentos">
+  <div class="wrap">
+    <div class="center"><span class="kicker verde rv">Quem já está usando</span><h2 class="rv">O que os primeiros usuários <em>estão dizendo</em>.</h2><p class="sub rv">Ninguém falou em ficar rico. Falaram do que o Jarvis faz de verdade: <b>devolver o seu tempo</b>.</p></div>
+    <div class="dep">
+      <div class="d rv"><blockquote>“Curti bastante a agilidade. <b>Configurei tudo pelo celular mesmo</b>, sem dor de cabeça.”</blockquote><div class="q"><span class="av">L</span><div><b>Lucas</b><span>Usuário Jarvis</span></div></div></div>
+      <div class="d rv"><blockquote>“Como trabalho o dia todo, não tenho tempo de ficar acompanhando gráficos. <b>O que mais me ganhou foi a praticidade</b> e a economia de tempo.”</blockquote><div class="q"><span class="av">C</span><div><b>Camila</b><span>Usuária Jarvis</span></div></div></div>
+      <div class="d rv"><blockquote>“Fui assistir ao jogo e deixei ele rodando no automático. <b>O melhor é não precisar ficar grudado na tela</b> o tempo todo.”</blockquote><div class="q"><span class="av">G</span><div><b>Gabriel</b><span>Usuário Jarvis</span></div></div></div>
+    </div>
+    <p class="dep-nota rv">Depoimentos de usuários reais, publicados com autorização. Eles falam da experiência de uso, não de resultado financeiro: operar cripto envolve risco e os resultados variam de pessoa para pessoa.</p>
   </div>
 </section>
 
